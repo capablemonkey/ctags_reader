@@ -21,24 +21,26 @@ module CtagsReader
       end
 
       if not File.readable?(filename)
-        return 1
+        return nil
       end
 
       # remove wrapping / and /;"
       pattern = ex_command.gsub(/^\//, '').gsub(/\/(;")?$/, '')
-      regex   = Regexp.new(pattern)
+
+      # Escape the chars between ^ and $
+      regex   = Regexp.new("^#{Regexp.escape(pattern[1..-2])}$")
 
       # try to find line number from file
       File.open(filename, 'r') do |file|
         index = 1
         file.each_line do |line|
-          return index if line =~ regex
+          return index if (regex =~ line) == 0
           index += 1
         end
       end
 
-      # pattern wasn't found, fall back to line 1
-      return 1
+      # nil if not found:
+      nil
     end
   end
 end

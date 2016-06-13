@@ -28,7 +28,7 @@ module CtagsReader
       pattern = ex_command.gsub(/^\//, '').gsub(/\/(;")?$/, '')
 
       # Escape the chars between ^ and $
-      regex   = Regexp.new("^#{Regexp.escape(pattern[1..-2])}$")
+      regex   = Regexp.new("^#{Regexp.escape(pattern[1..-2])}")
 
       # try to find line number from file
       File.open(filename, 'r') do |file|

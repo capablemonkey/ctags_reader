@@ -5,7 +5,7 @@ module CtagsReader
   #
   class Tag < Struct.new(:name, :filename, :ex_command, :type)
     def self.from_string(string)
-      name, filename, ex_command, type = string.split("\t")
+      name, filename, ex_command, type = to_utf8(string).split("\t")
       new(name, filename, ex_command, type)
     end
 
@@ -43,4 +43,11 @@ module CtagsReader
       nil
     end
   end
+end
+
+def to_utf8(str)
+  str = str.force_encoding("UTF-8")
+  return str if str.valid_encoding?
+  str = str.force_encoding("BINARY")
+  str.encode("UTF-8", invalid: :replace, undef: :replace)
 end
